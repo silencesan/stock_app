@@ -108,12 +108,23 @@ class StockDataFetcher:
             stock = yf.Ticker(symbol)
             
             # Get dividend data for specified years
-            end_date = datetime.now()
-            start_date = end_date - timedelta(days=365 * years)
+            end_date = pd.Timestamp.now()
+            start_date = end_date - pd.Timedelta(days=365 * years)
             
             dividends = stock.dividends
             if dividends.empty:
                 return None
+            
+            # Make sure both dates are timezone-aware if dividends index is timezone-aware
+            if dividends.index.tz is not None:
+                if start_date.tz is None:
+                    start_date = start_date.tz_localize('UTC').tz_convert(dividends.index.tz)
+                if end_date.tz is None:
+                    end_date = end_date.tz_localize('UTC').tz_convert(dividends.index.tz)
+            else:
+                # Make sure dates are timezone-naive if dividends index is timezone-naive
+                start_date = start_date.tz_localize(None) if start_date.tz is not None else start_date
+                end_date = end_date.tz_localize(None) if end_date.tz is not None else end_date
                 
             # Filter by date range
             dividend_data = dividends[
