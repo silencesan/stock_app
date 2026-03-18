@@ -21,10 +21,10 @@ def validate_stock_symbol(symbol: str) -> tuple[bool, Optional[str]]:
     # Remove spaces and convert to uppercase
     symbol = symbol.strip().upper()
     
-    # Check if it's in format XXXX.TW or just XXXX
-    if re.match(r'^\d{4}\.TW$', symbol):
+    # Check if it's in format XXXX.TW or just XXXX (4-6 digits)
+    if re.match(r'^\d{4,6}\.TW$', symbol):
         return True, symbol
-    elif re.match(r'^\d{4}$', symbol):
+    elif re.match(r'^\d{4,6}$', symbol):
         return True, f"{symbol}.TW"
     
     return False, None
