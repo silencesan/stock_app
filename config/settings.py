@@ -15,7 +15,7 @@ TAIWAN_BANK_STOCKS = {
     "2890": "永豐金",
     "2891": "中信金",
     "2892": "第一金",
-    "00712":"復華富時不動產"
+    "0712":"復華富時不動產"
 }
 
 # Technical Analysis Settings
