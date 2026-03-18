@@ -38,8 +38,12 @@ class StockDataFetcher:
             if len(data) < MIN_DATA_POINTS:
                 st.warning(ERROR_MESSAGES["insufficient_data"])
                 
-            # Clean column names
-            data.columns = ['Open', 'High', 'Low', 'Close', 'Volume', 'Dividends', 'Stock Splits']
+            # Standardize known column names (handle extra columns like Capital Gains for ETFs)
+            column_map = {
+                'open': 'Open', 'high': 'High', 'low': 'Low', 'close': 'Close',
+                'volume': 'Volume', 'dividends': 'Dividends', 'stock splits': 'Stock Splits'
+            }
+            data.columns = [column_map.get(c.lower(), c) for c in data.columns]
             
             return data
             
